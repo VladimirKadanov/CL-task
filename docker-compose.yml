@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  rewrite-forge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      - PORT=${PORT:-3000}
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
+      - LLM_MAX_TOKENS=${LLM_MAX_TOKENS:-1000}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - NODE_ENV=${NODE_ENV:-production}
+      # Pass Redis URL to the app container if defined in .env
+      - REDIS_URL=${REDIS_URL:-}
+      - CACHE_TTL_SECONDS=${CACHE_TTL_SECONDS:-3600}
+    depends_on:
+      - redis # Make app wait for redis to start
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379" # Expose Redis port if needed externally
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data # Persist Redis data (optional)
+
+volumes:
+  redis_data: # Define the volume 
