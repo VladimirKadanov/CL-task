@@ -102,6 +102,26 @@ npm run dev
 npm test
 ```
 
+   You can also run tests in watch mode:
+```bash
+npm run test:watch
+```
+
+   Or generate a coverage report:
+```bash
+npm run test:coverage
+```
+
+6. Run linter:
+```bash
+npm run lint
+```
+
+   To automatically fix linting issues:
+```bash
+npm run lint -- --fix
+```
+
 ## Docker
 
 ### Using Docker Compose (Recommended)
